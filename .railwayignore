@@ -1,0 +1,23 @@
+# `railway up` uploads the repo root by default. We deploy a single
+# service (apps/api) — the web latency page is a static site deployed
+# separately.
+
+# Other apps in the monorepo
+apps/web
+
+# Local-only / generated
+.git
+.github
+.turbo
+.vscode
+.idea
+node_modules
+**/node_modules
+**/dist
+**/.turbo
+**/build
+
+# OS / editor cruft
+.DS_Store
+**/.DS_Store
+*.log

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><circle cx=%228%22 cy=%228%22 r=%227%22 fill=%22%232563eb%22/></svg>" />
+    <title>Pingdo</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Pingdo</h1>
+        <p class="muted">Todo API latency, measured from this browser.</p>
+      </header>
+
+      <section>
+        <h2>Endpoints</h2>
+        <form id="endpoint-form" class="row">
+          <input id="endpoint-label" placeholder="Label (e.g. railway-us-west)" required />
+          <input id="endpoint-url" type="url" placeholder="https://api.example.com" required />
+          <button type="submit">Add</button>
+        </form>
+        <ul id="endpoint-list" class="list"></ul>
+      </section>
+
+      <section>
+        <h2>Benchmark</h2>
+        <div class="row">
+          <label>
+            Test
+            <select id="bench-test">
+              <option value="ping">GET /ping (no DB)</option>
+              <option value="ping-db">GET /ping/db (SELECT 1)</option>
+              <option value="list">GET /todos</option>
+              <option value="write">POST + DELETE /todos</option>
+            </select>
+          </label>
+          <label>
+            Requests
+            <input id="bench-count" type="number" min="1" max="500" value="20" />
+          </label>
+          <button id="bench-run">Run</button>
+        </div>
+        <p class="muted small">
+          One warm-up request per endpoint is discarded. Endpoints run one after another,
+          requests run sequentially. Network ≈ RTT − server app time.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Endpoint</th>
+                <th>Served from</th>
+                <th>n</th>
+                <th>min</th>
+                <th>p50</th>
+                <th>p95</th>
+                <th>max</th>
+                <th>app</th>
+                <th>db</th>
+                <th>network</th>
+              </tr>
+            </thead>
+            <tbody id="bench-results"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>Todos</h2>
+        <div class="row">
+          <label>
+            Endpoint
+            <select id="todo-endpoint"></select>
+          </label>
+          <span id="todo-latency" class="muted small"></span>
+        </div>
+        <form id="todo-form" class="row">
+          <input id="todo-title" placeholder="What needs doing?" required maxlength="256" />
+          <button type="submit">Add</button>
+        </form>
+        <ul id="todo-list" class="list"></ul>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

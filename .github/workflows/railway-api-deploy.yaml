@@ -1,0 +1,39 @@
+name: Railway API Deploy
+
+on:
+  push:
+    branches: [development, main]
+    paths:
+      - "apps/api/**"
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - "turbo.json"
+      - "railway.json"
+      - ".github/workflows/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Maps to the GitHub Environment named after the branch (development / main),
+    # which holds the env-scoped RAILWAY_API_SERVICE_NAME variable.
+    environment: ${{ github.ref_name }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      # `railway up` uploads cwd and ignores .railwayignore on this CLI
+      # version, so prune everything the api container doesn't need before
+      # the upload step to keep the payload small.
+      - name: Strip non-api dirs to shrink the Railway upload
+        run: |
+          rm -rf apps/web
+
+      - name: Deploy to Railway
+        run: |
+          npx railway up \
+            --service ${{ vars.RAILWAY_API_SERVICE_NAME }}
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
