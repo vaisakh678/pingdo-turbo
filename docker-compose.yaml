@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: pingdo
+      POSTGRES_PASSWORD: pingdo
+      POSTGRES_DB: pingdo
+    ports:
+      - "5432:5432"
+    volumes:
+      - pingdo_db_data:/var/lib/postgresql/data
+
+volumes:
+  pingdo_db_data:
